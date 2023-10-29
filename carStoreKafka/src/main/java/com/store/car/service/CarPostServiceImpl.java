@@ -2,6 +2,7 @@ package com.store.car.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,15 +51,29 @@ public class CarPostServiceImpl implements CarPostService {
 	}
 
 	@Override
-	public void changeCarSale(CarPostDto carPostDto, Long postId) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void changeCarSale(CarPostDto carPostDTO, Long postId) {
 
-	@Override
-	public void removeCarSale(Long postId) {
-		// TODO Auto-generated method stub
-		
-	}
+        carPostRepository.findById(postId).ifPresentOrElse(item->{
+            item.setDescription(carPostDTO.getDescription());
+            item.setContact(carPostDTO.getContact());
+            item.setPrice(carPostDTO.getPrice());
+            item.setBrand(carPostDTO.getBrand());
+            item.setEngineVersion(carPostDTO.getEngineVersion());
+            item.setModel(carPostDTO.getModel());
+
+            carPostRepository.save(item);
+
+        }, ()-> {
+            throw new NoSuchElementException();
+        });
+    }
+
+
+
+    @Override
+    public void removeCarSale(Long postId) {
+        carPostRepository.deleteById(postId);
+    }
+
 
 }
