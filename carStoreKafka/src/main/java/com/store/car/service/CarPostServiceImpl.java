@@ -37,13 +37,20 @@ public class CarPostServiceImpl implements CarPostService {
 	}
 
 	private CarPostDto mapCarEntityToDto(CarPostEntity carPostEntity) {
-
-		return CarPostDto.builder().brand(carPostEntity.getBrand()).city(carPostEntity.getCity())
-				.model(carPostEntity.getModel()).description(carPostEntity.getDescription())
-				.engineVersion(carPostEntity.getEngineVersion()).createdDate(carPostEntity.getCreatedDate())
-				.ownerName(carPostEntity.getOwnerPost().getName()).price(carPostEntity.getPrice()).build();
-
+       
+	    return new CarPostDto.Builder()
+	    		.brand(carPostEntity.getBrand())
+				.model(carPostEntity.getModel())
+				.price(carPostEntity.getPrice())
+				.description(carPostEntity.getDescription())
+				.engineVersion(carPostEntity.getEngineVersion())
+				.city(carPostEntity.getCity())
+				.createdDate(carPostEntity.getCreatedDate())
+				.contact(carPostEntity.getContact()).build();
+	    		
 	}
+
+
 
 	@Override
 	public void changeCarSale(CarPostDto carPostDTO, Long postId) {
