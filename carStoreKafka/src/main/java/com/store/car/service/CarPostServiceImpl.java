@@ -24,9 +24,8 @@ public class CarPostServiceImpl implements CarPostService {
 
 	@Override
 	public void newPostDetails(CarPostDto carPostDto) {
-		 CarPostEntity carPostEntity = mapCarDtoToEntity(carPostDto);
-	        carPostRepository.save(carPostEntity);
-
+		CarPostEntity carPostEntity = mapCarDtoToEntity(carPostDto);
+		carPostRepository.save(carPostEntity);
 
 	}
 
@@ -40,20 +39,13 @@ public class CarPostServiceImpl implements CarPostService {
 	}
 
 	private CarPostDto mapCarEntityToDto(CarPostEntity carPostEntity) {
-       
-	    return new CarPostDto.Builder()
-	    		.brand(carPostEntity.getBrand())
-				.model(carPostEntity.getModel())
-				.price(carPostEntity.getPrice())
-				.description(carPostEntity.getDescription())
-				.engineVersion(carPostEntity.getEngineVersion())
-				.city(carPostEntity.getCity())
-				.createdDate(carPostEntity.getCreatedDate())
-				.contact(carPostEntity.getContact()).build();
-	    		
+
+		return new CarPostDto.Builder().brand(carPostEntity.getBrand()).model(carPostEntity.getModel())
+				.price(carPostEntity.getPrice()).description(carPostEntity.getDescription())
+				.engineVersion(carPostEntity.getEngineVersion()).city(carPostEntity.getCity())
+				.createdDate(carPostEntity.getCreatedDate()).contact(carPostEntity.getContact()).build();
+
 	}
-
-
 
 	@Override
 	public void changeCarSale(CarPostDto carPostDTO, Long postId) {
@@ -77,27 +69,26 @@ public class CarPostServiceImpl implements CarPostService {
 	public void removeCarSale(Long postId) {
 		carPostRepository.deleteById(postId);
 	}
-	
+
 	private CarPostEntity mapCarDtoToEntity(CarPostDto carPostDTO) {
-        CarPostEntity carPostEntity = new CarPostEntity();
+		CarPostEntity carPostEntity = new CarPostEntity();
 
-        ownerPostRepository.findById(carPostDTO.getOwnerId()).ifPresentOrElse(item->{
-            carPostEntity.setOwnerPost(item);
-            carPostEntity.setContact(item.getContactNumber());
-        }, ()-> {
-            throw new RuntimeException();
-        });
+		ownerPostRepository.findById(carPostDTO.getOwnerId()).ifPresentOrElse(item -> {
+			carPostEntity.setOwnerPost(item);
+			carPostEntity.setContact(item.getContactNumber());
+		}, () -> {
+			throw new RuntimeException();
+		});
 
-        carPostEntity.setModel(carPostDTO.getModel());
-        carPostEntity.setBrand(carPostDTO.getBrand());
-        carPostEntity.setPrice(carPostDTO.getPrice());
-        carPostEntity.setCity(carPostDTO.getCity());
-        carPostEntity.setDescription(carPostDTO.getDescription());
-        carPostEntity.setEngineVersion(carPostDTO.getEngineVersion());
-        carPostEntity.setCreatedDate(String.valueOf(new Date()));
+		carPostEntity.setModel(carPostDTO.getModel());
+		carPostEntity.setBrand(carPostDTO.getBrand());
+		carPostEntity.setPrice(carPostDTO.getPrice());
+		carPostEntity.setCity(carPostDTO.getCity());
+		carPostEntity.setDescription(carPostDTO.getDescription());
+		carPostEntity.setEngineVersion(carPostDTO.getEngineVersion());
+		carPostEntity.setCreatedDate(String.valueOf(new Date()));
 
-        return carPostEntity;
-    }
-
+		return carPostEntity;
+	}
 
 }
