@@ -20,29 +20,28 @@ import com.store.car.dto.CarPostDto;
 @Configuration
 public class KafkaConsumerConfigs {
 
-	 @Value("${spring.kafka.bootstrap-servers}")
-	    private String bootstrapServers;
+	@Value("${spring.kafka.bootstrap-servers}")
+	private String bootstrapServers;
 
-	    @Bean
-	    public ConsumerFactory<String, CarPostDto> consumerFactory() {
+	@Bean
+	public ConsumerFactory<String, CarPostDto> consumerFactory() {
 
-	        Map<String, Object> props = new HashMap<>();
+		Map<String, Object> props = new HashMap<>();
 
-	        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-	        props.put(ConsumerConfig.GROUP_ID_CONFIG, "store-posts-group");
-	        props.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
-	        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-	        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-	        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),
-	                new JsonDeserializer<>(CarPostDto.class, false));
-	    }
+		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, "store-posts-group");
+		props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+		return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),
+				new JsonDeserializer<>(CarPostDto.class, false));
+	}
 
-	    @Bean
-	    public ConcurrentKafkaListenerContainerFactory<String, CarPostDto> kafkaListenerContainerFactory() {
-	        ConcurrentKafkaListenerContainerFactory<String, CarPostDto>
-	                factory = new ConcurrentKafkaListenerContainerFactory<>();
-	        factory.setConsumerFactory(consumerFactory());
-	        return factory;
-	    }
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, CarPostDto> kafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, CarPostDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(consumerFactory());
+		return factory;
+	}
 
 }
